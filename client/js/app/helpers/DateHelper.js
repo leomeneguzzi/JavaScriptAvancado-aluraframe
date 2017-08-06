@@ -5,6 +5,9 @@ class DateHelper {
     }
 
     static stringToDate(date) {
+
+        if (!/\d{4}-\d{2}-\d{2}/.test(date)) throw new Error("Invalid date");
+
         return new Date(...
             date
             .split("-")
@@ -16,8 +19,6 @@ class DateHelper {
     }
 
     static dateToString(date) {
-        return date.getDate() + '/' +
-            (date.getMonth() + 1) + '/' +
-            date.getFullYear();
+        return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
     }
 }
