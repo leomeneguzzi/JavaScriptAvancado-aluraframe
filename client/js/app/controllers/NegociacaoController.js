@@ -41,4 +41,19 @@ class NegociacaoController {
         this._negociacoes.delete();
         this._mensagem.texto = "Negociações apagadas";
     }
+
+    importNegociacoes() {
+        let negociacaoService = new NegociacaoService();
+        negociacaoService.importNegociacoes((err, negociacoes) => {
+            if (err) {
+                this._mensagem.texto = err;
+                return;
+            }
+            negociacoes.forEach(negociacao => {
+                this._negociacoes.add(negociacao);
+                this._mensagem.texto = 'deu bom porra';
+            });
+
+        });
+    }
 }
