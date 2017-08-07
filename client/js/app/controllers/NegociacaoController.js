@@ -5,7 +5,21 @@ class NegociacaoController {
         this._inputData = $("#data");
         this._inputQuantidade = $("#quantidade");
         this._inputValor = $("#valor");
-        this._negociacoes = new Negociacoes((model) => this._negociacoesView.update(model));
+
+        let self = this;
+        this._negociacoes = new Proxy(new Negociacoes(), {
+            get(target, prop, receiver) {
+                if (['add', 'delete'].includes(prop) && (typeof (target[prop]) == typeof (Function))) {
+                    return function () {
+                        Reflect.apply(target[prop], target, arguments);
+                        self._negociacoesView.update(target);
+                    }
+                }
+                return Reflect.get(target, prop, receiver);
+            }
+        });
+
+        //this._negociacoes = new Negociacoes((model) => this._negociacoesView.update(model));
         this._negociacoesView = new NegociacoesView($('#negociacoesView'));
         this._mensagem = new Mensagem();
         this._mensagemView = new MensagemView($("#mensagemView"));
